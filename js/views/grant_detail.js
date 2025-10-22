@@ -171,7 +171,22 @@ export async function bindGrantDetail(user, grantId) {
 }
 
 function Meta(label, value) {
-  const text = (value?.toDate?.) ? value.toDate().toLocaleDateString('ko-KR') : (value ?? "-");
+  const toKoreanDate = (v) => {
+    // Firestore Timestamp 객체인 경우
+    if (v && typeof v.toDate === "function") {
+      return v.toDate().toLocaleDateString("ko-KR");
+    }
+    // 숫자/문자열/Date를 날짜로 파싱
+    if (v) {
+      const d = new Date(v);
+      if (!isNaN(d.getTime())) return d.toLocaleDateString("ko-KR");
+      return String(v); // 날짜 아님 → 그대로 표시
+    }
+    return "-";
+  };
+
+  const text = toKoreanDate(value);
+
   return `
   <div class="flex flex-col gap-1 border-t border-[#d1e6d9] py-4">
     <p class="text-[#51946c] text-sm">${label}</p>
