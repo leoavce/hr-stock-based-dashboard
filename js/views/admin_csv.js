@@ -32,39 +32,47 @@ export function bindCsv(){
     const file = document.getElementById("csv-grants").files?.[0];
     if(!file) return toast("CSV 파일을 선택하세요");
     const rows = await readCsv(file);
-    let count=0;
+    let ok=0, skip=0;
     for(const r of rows){
-      if(!r.grantType || !r.grantDate || !r.totalShares) continue;
+      if(!r.grantType || !r.grantDate || !r.totalShares){ skip++; continue; }
+      const grantDate = parseDate(r.grantDate);
+      if(!grantDate){ skip++; continue; }
+      const expireDate = r.expireDate ? parseDate(r.expireDate) : null;
+      if(r.expireDate && !expireDate){ skip++; continue; }
+
       await addDoc(collection(db, COL.GRANTS), {
         grantType: r.grantType.trim(),
-        grantDate: new Date(r.grantDate),
+        grantDate,
         totalShares: Number(r.totalShares),
         strikePrice: r.strikePrice? Number(r.strikePrice): null,
-        expireDate: r.expireDate? new Date(r.expireDate): null,
+        expireDate,
         vestedTotal: 0, exercisedTotal: 0
       });
-      count++;
+      ok++;
     }
-    toast(`부여 ${count}건 업로드`);
+    toast(`부여 업로드 완료: ${ok}건 / 실패(건너뜀): ${skip}건`);
   });
 
   document.getElementById("btn-upload-vests").addEventListener("click", async()=>{
     const file = document.getElementById("csv-vests").files?.[0];
     if(!file) return toast("CSV 파일을 선택하세요");
     const rows = await readCsv(file);
-    let count=0;
+    let ok=0, skip=0;
     for(const r of rows){
-      if(!r.grantId || !r.vestDate || !r.vestedShares) continue;
+      if(!r.grantId || !r.vestDate || !r.vestedShares){ skip++; continue; }
+      const vestDate = parseDate(r.vestDate);
+      if(!vestDate){ skip++; continue; }
+
       await addDoc(collection(db, COL.VESTS), {
         grantId: r.grantId.trim(),
-        vestDate: new Date(r.vestDate),
+        vestDate,
         vestedShares: Number(r.vestedShares),
         ratio: r.ratio? Number(r.ratio): 0,
         vested: String(r.vested).toLowerCase()==="true"
       });
-      count++;
+      ok++;
     }
-    toast(`베스팅 ${count}건 업로드`);
+    toast(`베스팅 업로드 완료: ${ok}건 / 실패(건너뜀): ${skip}건`);
   });
 }
 
@@ -83,7 +91,6 @@ async function readCsv(file){
   return out;
 }
 
-// CSV 안전 파서(간단): 따옴표 포함 필드 처리
 function splitCsvLine(line){
   const res=[], len=line.length;
   let cur="", inq=false;
@@ -100,4 +107,11 @@ function splitCsvLine(line){
   }
   res.push(cur);
   return res;
+}
+
+function parseDate(s){
+  // 기대 포맷: YYYY-MM-DD
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(s)) return null;
+  const d = new Date(s+"T00:00:00");
+  return isNaN(d) ? null : d;
 }
