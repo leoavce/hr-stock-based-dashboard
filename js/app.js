@@ -11,7 +11,12 @@ import { CsvView, bindCsv } from "./views/admin_csv.js";
 
 const app = document.getElementById("app");
 
+// ✅ auth 준비 완료 전에는 라우팅 금지
+let AUTH_READY = false;
+export function setAuthReady(v){ AUTH_READY = v; }
+
 export async function navigate(hash, user = auth.currentUser){
+  if(!AUTH_READY){ return; }  // ← 여기서 막음 (권한 오류 예방)
   const [_, route, id] = (hash || "").split("/");
   spinner(true);
 
@@ -40,4 +45,5 @@ export async function navigate(hash, user = auth.currentUser){
   }
 }
 
-window.addEventListener("hashchange", ()=>navigate(location.hash));
+// 해시 변경은 auth 준비 후에만 반영
+window.addEventListener("hashchange", ()=>{ if(AUTH_READY) navigate(location.hash); });
