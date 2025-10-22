@@ -3,86 +3,80 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>NAVER HR — 주식보상 관리</title>
+  <title>NAVER HR — 주식보상 관리(Admin)</title>
 
-  <!-- Tailwind (forms + container-queries) -->
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-
-  <!-- Fonts & Icons -->
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet"/>
-
-  <!-- Tailwind Config -->
   <script>
     tailwind.config = {
       darkMode: "class",
       theme: {
         extend: {
           colors: {
-            primary: "#2DB400",              // NAVER 그린 톤
-            "primary-soft": "#d7f2df",
-            "background-light": "#f8fbfa",
-            "background-dark": "#0f1611",
-            "ink": "#0e1a13"
+            primary: "#2DB400",
+            "primary-soft": "#E8F6EB",
+            ink: "#0e1a13",
+            "bg": "#FAFCFA",
+            "muted": "#5A7A62",
+            "border": "#DDE9E1"
           },
           fontFamily: {
-            display: ["Noto Sans KR", "Manrope", "sans-serif"]
+            display: ["Noto Sans KR", "Manrope", "system-ui", "sans-serif"]
           },
           borderRadius: {
-            DEFAULT: "0.5rem",
-            lg: "0.75rem",
-            xl: "1rem",
+            DEFAULT: "0.75rem",
+            lg: "1rem",
+            xl: "1.25rem",
             full: "9999px"
           },
           boxShadow: {
-            soft: "0 8px 30px rgba(0,0,0,0.06)"
+            soft: "0 10px 30px rgba(0,0,0,0.06)"
           }
-        },
-      },
+        }
+      }
     }
   </script>
 
-  <style>
-    .material-symbols-outlined {
-      font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24
-    }
-  </style>
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;700;800&family=Noto+Sans+KR:wght@400;600;800;900&display=swap" rel="stylesheet"/>
+
+  <!-- Favicon(임시) -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='64' width='64'%3E%3Crect width='64' height='64' rx='12' fill='%232DB400'/%3E%3Ctext x='50%25' y='58%25' text-anchor='middle' font-size='44' fill='white' font-family='Arial'%3EN%3C/text%3E%3C/svg%3E">
 
   <link rel="stylesheet" href="./css/styles.css"/>
 </head>
-<body class="bg-background-light text-ink font-display">
+<body class="bg-bg text-ink font-display">
   <!-- Top Nav -->
-  <header class="sticky top-0 z-30 bg-white/80 backdrop-blur shadow-soft">
-    <div class="max-w-[1200px] mx-auto px-4 md:px-10 py-3 flex items-center justify-between">
+  <header class="sticky top-0 z-30 bg-white/85 backdrop-blur shadow-soft">
+    <div class="max-w-[1280px] mx-auto px-5 md:px-10 py-4 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <img src="./assets/naver_mark.svg" alt="NAVER" class="w-7 h-7"/>
-        <span class="text-lg md:text-xl font-black tracking-tight">NAVER HR — Stock Compensation</span>
+        <!-- Inline NAVER Mark -->
+        <svg class="w-8 h-8" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" aria-label="NAVER">
+          <rect width="28" height="28" rx="6" fill="#2DB400"/>
+          <path d="M8 7h4.5l3.5 5.3V7H20v14h-4.5L12 15.7V21H8V7z" fill="white"/>
+        </svg>
+        <span class="text-2xl md:text-3xl font-extrabold tracking-tight">NAVER HR — StockComp (Admin)</span>
       </div>
-      <nav class="flex items-center gap-2">
-        <a href="#/dashboard" class="px-3 py-2 rounded hover:bg-primary-soft text-sm font-bold">대시보드</a>
-        <a href="#/grants" class="px-3 py-2 rounded hover:bg-primary-soft text-sm font-bold">부여 목록</a>
-        <button id="btn-logout" class="hidden px-4 py-2 bg-primary text-white rounded font-bold">로그아웃</button>
+      <nav class="flex items-center gap-1 md:gap-2">
+        <a href="#/dashboard" class="navlink">대시보드</a>
+        <a href="#/grants" class="navlink">부여 목록</a>
+        <a href="#/admin/new-grant" class="navlink">부여 등록</a>
+        <a href="#/admin/csv" class="navlink">CSV 업로드</a>
+        <button id="btn-logout" class="ml-1 md:ml-2 px-4 py-2 bg-primary text-white rounded-lg text-sm md:text-base font-extrabold">로그아웃</button>
       </nav>
     </div>
   </header>
 
   <!-- App Root -->
-  <main id="app" class="min-h-[calc(100vh-64px)]">
-    <!-- 라우터가 뷰를 주입 -->
-  </main>
+  <main id="app" class="min-h-[calc(100vh-72px)]"></main>
 
   <!-- Toast -->
-  <div id="toast" class="fixed bottom-5 right-5 hidden rounded bg-ink text-white px-4 py-2 shadow-soft"></div>
+  <div id="toast" class="fixed bottom-5 right-5 hidden rounded-lg bg-ink text-white px-5 py-3 shadow-soft text-base"></div>
 
-  <!-- Firebase SDKs -->
-  <script type="module">
-    // Firebase v10+ (Modular)
-    // 필수 SDK: app, auth, firestore
-  </script>
-
-  <!-- App Scripts -->
+  <!-- Scripts -->
   <script type="module" src="./js/firebase.js"></script>
   <script type="module" src="./js/ui.js"></script>
   <script type="module" src="./js/hr.js"></script>
@@ -90,6 +84,8 @@
   <script type="module" src="./js/views/dashboard.js"></script>
   <script type="module" src="./js/views/grants_list.js"></script>
   <script type="module" src="./js/views/grant_detail.js"></script>
+  <script type="module" src="./js/views/admin_grant_form.js"></script>
+  <script type="module" src="./js/views/admin_csv.js"></script>
   <script type="module" src="./js/auth.js"></script>
   <script type="module" src="./js/app.js"></script>
 </body>
