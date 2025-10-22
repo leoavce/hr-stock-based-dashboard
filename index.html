@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>NAVER HR — 주식보상 관리(Admin)</title>
 
-  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <script>
     tailwind.config = {
@@ -13,47 +12,23 @@
       theme: {
         extend: {
           colors: {
-            primary: "#2DB400",
-            "primary-soft": "#E8F6EB",
-            ink: "#0e1a13",
-            "bg": "#FAFCFA",
-            "muted": "#5A7A62",
-            "border": "#DDE9E1"
+            primary: "#2DB400", "primary-soft": "#E8F6EB",
+            ink: "#0e1a13", bg: "#FAFCFA", muted: "#5A7A62", border: "#DDE9E1"
           },
-          fontFamily: {
-            display: ["Noto Sans KR", "Manrope", "system-ui", "sans-serif"]
-          },
-          borderRadius: {
-            DEFAULT: "0.75rem",
-            lg: "1rem",
-            xl: "1.25rem",
-            full: "9999px"
-          },
-          boxShadow: {
-            soft: "0 10px 30px rgba(0,0,0,0.06)"
-          }
+          fontFamily: { display: ["Noto Sans KR","Manrope","system-ui","sans-serif"] },
+          borderRadius: { DEFAULT: "0.75rem", lg:"1rem", xl:"1.25rem", full:"9999px" },
+          boxShadow: { soft: "0 10px 30px rgba(0,0,0,.06)" }
         }
       }
     }
   </script>
-
-  <!-- Fonts & Icons -->
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;700;800&family=Noto+Sans+KR:wght@400;600;800;900&display=swap" rel="stylesheet"/>
-
-  <!-- Favicon(임시) -->
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='64' width='64'%3E%3Crect width='64' height='64' rx='12' fill='%232DB400'/%3E%3Ctext x='50%25' y='58%25' text-anchor='middle' font-size='44' fill='white' font-family='Arial'%3EN%3C/text%3E%3C/svg%3E">
-
   <link rel="stylesheet" href="./css/styles.css"/>
 </head>
 <body class="bg-bg text-ink font-display">
-  <!-- Top Nav -->
   <header class="sticky top-0 z-30 bg-white/85 backdrop-blur shadow-soft">
     <div class="max-w-[1280px] mx-auto px-5 md:px-10 py-4 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <!-- Inline NAVER Mark -->
         <svg class="w-8 h-8" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" aria-label="NAVER">
           <rect width="28" height="28" rx="6" fill="#2DB400"/>
           <path d="M8 7h4.5l3.5 5.3V7H20v14h-4.5L12 15.7V21H8V7z" fill="white"/>
@@ -62,6 +37,7 @@
       </div>
       <nav class="flex items-center gap-1 md:gap-2">
         <a href="#/dashboard" class="navlink">대시보드</a>
+        <a href="#/employees" class="navlink">직원 관리</a>
         <a href="#/grants" class="navlink">부여 목록</a>
         <a href="#/admin/new-grant" class="navlink">부여 등록</a>
         <a href="#/admin/csv" class="navlink">CSV 업로드</a>
@@ -70,13 +46,9 @@
     </div>
   </header>
 
-  <!-- App Root -->
   <main id="app" class="min-h-[calc(100vh-72px)]"></main>
-
-  <!-- Toast -->
   <div id="toast" class="fixed bottom-5 right-5 hidden rounded-lg bg-ink text-white px-5 py-3 shadow-soft text-base"></div>
 
-  <!-- Scripts -->
   <script type="module" src="./js/firebase.js"></script>
   <script type="module" src="./js/ui.js"></script>
   <script type="module" src="./js/hr.js"></script>
@@ -86,6 +58,8 @@
   <script type="module" src="./js/views/grant_detail.js"></script>
   <script type="module" src="./js/views/admin_grant_form.js"></script>
   <script type="module" src="./js/views/admin_csv.js"></script>
+  <script type="module" src="./js/views/employees_list.js"></script>
+  <script type="module" src="./js/views/admin_employee_form.js"></script>
   <script type="module" src="./js/auth.js"></script>
   <script type="module" src="./js/app.js"></script>
 </body>
