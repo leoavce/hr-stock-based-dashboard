@@ -7,7 +7,7 @@ import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.5/firebas
 const firebaseConfig = {
   apiKey: "AIzaSyDkHDnimtrct-WAT93jjA0h5QGXISrYElc",
   authDomain: "stock-based-dash.firebaseapp.com",
-  projectId: "stock-based-dash"
+  projectId: "stock-based-dash",
   appId: "1:54158559433:web:04ee1be85107804c596518"
 };
 
