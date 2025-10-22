@@ -1,6 +1,6 @@
 // js/views/grants_list.js
 import { db, COL } from "../firebase.js";
-import { collection, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import { collection, getDocs, orderBy, query, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 import { fmt } from "../hr.js";
 
 export function GrantsListView(){
@@ -18,6 +18,7 @@ export function GrantsListView(){
         <thead>
           <tr class="bg-white">
             <th class="px-4 py-4 text-left text-sm font-extrabold">부여 ID</th>
+            <th class="px-4 py-4 text-left text-sm font-extrabold">직원</th>
             <th class="px-4 py-4 text-left text-sm font-extrabold">유형</th>
             <th class="px-4 py-4 text-left text-sm font-extrabold">부여일</th>
             <th class="px-4 py-4 text-left text-sm font-extrabold">총 주식</th>
@@ -32,24 +33,32 @@ export function GrantsListView(){
 }
 
 export async function bindGrantsList(){
-  const q = query(collection(db, COL.GRANTS), orderBy("grantDate", "desc"));
-  const snap = await getDocs(q);
+  const qy = query(collection(db, COL.GRANTS), orderBy("grantDate","desc"));
+  const snap = await getDocs(qy);
   const rows = [];
-  snap.forEach(doc=>{
-    const g = { id:doc.id, ...doc.data() };
+
+  for (const d of snap.docs){
+    const g = { id:d.id, ...d.data() };
+    let empTxt = "-";
+    if(g.employeeId){
+      const es = await getDoc(doc(db, COL.EMP, g.employeeId)).catch(()=>null);
+      const e = es?.data();
+      if(e) empTxt = `${e.name||"-"} (${e.empNo||"-"})`;
+    }
     const pct = Math.round(((g.vestedTotal||0)/(g.totalShares||1))*100);
+
     rows.push(`
       <tr class="table-row">
         <td class="px-4 py-3 text-sm">${g.id}</td>
+        <td class="px-4 py-3 text-sm">${empTxt}</td>
         <td class="px-4 py-3 text-sm">${g.grantType||"-"}</td>
         <td class="px-4 py-3 text-sm">${fmt.date(g.grantDate)}</td>
         <td class="px-4 py-3 text-sm">${fmt.int(g.totalShares)}</td>
         <td class="px-4 py-3 text-sm">${pct}%</td>
-        <td class="px-4 py-3 text-right">
-          <a href="#/grants/${g.id}" class="btn btn-soft">상세</a>
-        </td>
+        <td class="px-4 py-3 text-right"><a href="#/grants/${g.id}" class="btn btn-soft">상세</a></td>
       </tr>`);
-  });
+  }
+
   document.getElementById("grants-tbody").innerHTML = rows.join("") || `
-    <tr><td class="px-4 py-6 text-sm text-muted" colspan="6">부여가 없습니다.</td></tr>`;
+    <tr><td class="px-4 py-6 text-sm text-muted" colspan="7">부여가 없습니다.</td></tr>`;
 }
